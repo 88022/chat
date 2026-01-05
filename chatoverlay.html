@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Twitch Chat Overlay</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+/* =================================================
+   ГЛОБАЛЬНО — ПРОЗРАЧНЫЙ ФОН
+   ================================================= */
+html, body {
+    background: transparent !important;
+    overflow: hidden !important;
+    margin: 0;
+    padding: 0;
+}
+
+.stream-chat,
+.stream-chat * {
+    background: transparent !important;
+    font-family: 'Inter', system-ui, sans-serif !important;
+}
+
+/* Лишний UI */
+.stream-chat-header,
+.stream-chat-footer,
+.chat-input,
+.community-highlight-stack,
+.community-highlight-stack__scroll-area {
+    display: none !important;
+}
+
+/* Сообщения + награды */
+.chat-line__message,
+.chat-line__reward,
+.chat-line__cheer,
+.chat-line__subscription {
+    margin-bottom: 8px !important;
+    padding: 6px 10px !important;
+
+    background: rgba(0, 0, 0, 0.45) !important;
+    border-radius: 6px !important;
+
+    line-height: 1.4 !important;
+    animation: messageLife 14s ease-in-out forwards;
+}
+
+/* Ник */
+.chat-author__display-name {
+    font-weight: 600 !important;
+    font-size: 14px !important;
+}
+
+/* Текст */
+.text-fragment {
+    font-size: 15px !important;
+    color: #ffffff !important;
+}
+
+/* Бейджи */
+.chat-badge {
+    margin-right: 4px !important;
+}
+
+/* BTTV / 7TV / FFZ эмодзи */
+.chat-line__message img,
+.chat-line__reward img,
+.chat-line__cheer img,
+.chat-line__subscription img {
+    vertical-align: middle !important;
+}
+
+/* Контейнер сообщений */
+.chat-scrollable-area__message-container {
+    padding: 14px 10px !important;
+}
+
+/* Скроллбар */
+.chat-scrollable-area__message-container::-webkit-scrollbar,
+.scrollable-area::-webkit-scrollbar,
+*::-webkit-scrollbar {
+    width: 0px !important;
+    display: none !important;
+}
+
+/* Анимация */
+@keyframes messageLife {
+    0% { opacity: 0; transform: translateX(-6px); }
+    6% { opacity: 1; transform: translateX(0); }
+    70% { opacity: 1; }
+    100% { opacity: 0; }
+}
+</style>
+</head>
+<body>
+<div id="twitch-chat"></div>
+
+<script src="https://embed.twitch.tv/embed/v1.js"></script>
+<script>
+// ==============================
+// Twitch Embed для твоего канала
+// ==============================
+new Twitch.Embed("twitch-chat", {
+    width: 350,        // ширина чата (можешь изменить)
+    height: 600,       // высота чата
+    channel: "ohmydanya", // твой канал
+    layout: "video",   // можно "chat"
+    theme: "dark"
+});
+
+// ==============================
+// Удаление системных сообщений каждые 500 мс
+// ==============================
+setInterval(() => {
+    document.querySelectorAll(
+        '.chat-line__status, ' +
+        '.chat-line__notice, ' +
+        '.chat-line__system-message, ' +
+        '.user-notice-line__message, ' +
+        '.community-highlight, ' +
+        '.community-highlight-stack, ' +
+        '.pinned-chat-message, ' +
+        '.chat-welcome-message, ' +
+        '.chat-rules-message, ' +
+        '.chat-line__redemption-notice, ' +
+        '.chat-line__community-notice, ' +
+        '.chat-line__highlight-notice'
+    ).forEach(el => el.remove());
+}, 500);
+</script>
+</body>
+</html>
